@@ -1,0 +1,6 @@
+{
+  "rules": {
+    "maxCertificateExpiry": 14,
+    "minGrade": "A"
+  }
+}

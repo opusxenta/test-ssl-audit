@@ -20,6 +20,8 @@ jobs:
       matrix:
         uri:
           - 'byond.cloud'
+          - 'ivc.byond.pro'
+          - 'gmctuat.opusxenta.com'
     steps:
       - name: Checkout
         uses: actions/checkout@v6

@@ -12,6 +12,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   ssl-standard:
     runs-on: ubuntu-latest

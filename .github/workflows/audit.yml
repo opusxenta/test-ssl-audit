@@ -12,15 +12,17 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
-  ssl:
+  ssl-standard:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         uri:
           - 'byond.cloud'
-          - 'ivc.byond.pro'
           - 'gmctuat.opusxenta.com'
     steps:
       - name: Checkout
@@ -42,5 +44,35 @@ jobs:
         uses: actions/upload-artifact@v6
         if: always()
         with:
-          name: ssl-results-${{ strategy.job-index }}
+          name: ssl-results-standard-${{ strategy.job-index }}
+          path: testssl_results_*.json
+
+  ssl-legacy:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        uri:
+          - 'ivc.byond.pro'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Test SSL/TLS for ${{ matrix.uri }}
+        uses: s01ipsist/test-ssl-action@main
+        with:
+          uri: ${{ matrix.uri }}
+
+      - name: Audit SSL Results
+        uses: s01ipsist/test-ssl-auditor-action@v1
+        with:
+          results-path: 'testssl_results_*.json'
+          rules-config: '.testssl-rules-legacy.json'
+          fail-on-violation: 'true'
+
+      - name: Upload results
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: ssl-results-legacy-${{ strategy.job-index }}
           path: testssl_results_*.json
